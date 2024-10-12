@@ -6,6 +6,9 @@ public class Gui {
     private JFrame frame;
     private JTextField field;
     private Gui() {
+        frame = new JFrame();
+        field = new JTextField();
+
         frame.setVisible(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);

@@ -19,6 +19,8 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
         combo = new ArrayList<>();
         try {
             GlobalScreen.registerNativeHook();
+            GlobalScreen.addNativeKeyListener(this);
+            GlobalScreen.addNativeMouseListener(this);
         } catch (NativeHookException e) {
             throw new RuntimeException(e);
         }
@@ -32,17 +34,18 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
         return instance;
     }
 
-    @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
-        combo.add(e.getKeyCode());
+        if(!combo.contains(e.getKeyCode())) {
+            combo.add(e.getKeyCode());
+        }
     }
 
-    @Override
+
     public void nativeKeyReleased(NativeKeyEvent e) {
-        combo.remove(e.getKeyCode());
+        combo.remove(Integer.valueOf(e.getKeyCode()));
     }
     private int x1, y1, x2, y2;
-    @Override
+
     public void nativeMousePressed(NativeMouseEvent e) {
         if(latch != null) {
             x1 = e.getX();
@@ -51,7 +54,7 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
         }
     }
 
-    @Override
+
     public void nativeMouseReleased(NativeMouseEvent e) {
         if(latch != null) {
             x2 = e.getX();
@@ -61,24 +64,25 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
     }
 
     public void checkInput(){
-        System.out.println(combo);
-        if(combo.size() == 2){
-            if(combo.contains(NativeKeyEvent.VC_META) && combo.contains(NativeKeyEvent.VC_S)){
-                latch = new CountDownLatch(2);
-                try {
-                    latch.await();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                JOptionPane.showMessageDialog(null, "Drag a box to screenshot");
-                Screenshot ss = Screenshot.getInstance();
-                Image image = ss.takeScreenshot(x1, y1, x2, y2);
-                Gui gui = Gui.getInstance();
-                gui.displayImage(image);
-                TessHandler tessHandler = new TessHandler();
-                String text = tessHandler.Process(image);
-                gui.displayText(text);
+        if(combo.contains(NativeKeyEvent.VC_CONTROL) && combo.contains(NativeKeyEvent.VC_S)) {
+            System.out.println("sucess");
+            combo.clear();
+            JOptionPane.showMessageDialog(null, "Drag a box to screenshot");
+            latch = new CountDownLatch(2);
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+
+
+            Screenshot ss = Screenshot.getInstance();
+            Image image = ss.takeScreenshot(x1, y1, x2, y2);
+            Gui gui = Gui.getInstance();
+            gui.displayImage(image);
+            TessHandler tessHandler = new TessHandler();
+            String text = tessHandler.Process(image);
+            gui.displayText(text);
         }
     }
 

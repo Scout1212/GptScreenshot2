@@ -12,6 +12,11 @@ public class Test2 {
         while(i < 10){
             inputHandler.checkInput();
         }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void main(String [] args){

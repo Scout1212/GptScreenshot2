@@ -7,11 +7,14 @@ import java.io.File;
 import java.io.IOException;
 
 public class TessHandler extends Tesseract {
+    //temporary variables for local data paths;
 
+    private String windowsDataPath = "C:\\ProgramData\\chocolatey";
+    private String macDataPath = "/opt/homebrew/Cellar/tesseract/5.4.1_1";
 
     public TessHandler() {
         String dataPath;
-        System.setProperty("jna.library.path", "/opt/homebrew/Cellar/tesseract/5.4.1_1");
+        System.setProperty("jna.library.path", windowsDataPath);
         try {
             dataPath = new File("").getCanonicalPath() + "/src/main/resources/Tess4J/tessdata";
         } catch (IOException e) {

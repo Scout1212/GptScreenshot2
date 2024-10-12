@@ -8,7 +8,7 @@ public class Screenshot{
     private Screenshot(){
         // code to take screenshot
         try {
-            Robot sc = new Robot();
+            sc = new Robot();
         } catch (AWTException e) {
             throw new RuntimeException(e);
         }
@@ -24,11 +24,11 @@ public class Screenshot{
 
     public Image takeScreenshot(int x1, int y1, int x2, int y2){
         int ax1 = Math.min(x1, x2);
-        int ay1 = Math.max(y1, y2);
+        int ay1 = Math.min(y1, y2);
         int ax2 = Math.max(x1, x2);
-        int ay2 = Math.min(y1, y2);
+        int ay2 = Math.max(y1, y2);
 
-        int width =  ax2 - ax1;
+        int width = ax2 - ax1;
         int height = ay2 - ay1;
 
 
