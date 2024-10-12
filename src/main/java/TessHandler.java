@@ -6,8 +6,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class TessHandler extends Tesseract {
+public class TessHandler{
     //temporary variables for local data paths;
+    
+    private Tesseract tess;
 
     private String windowsDataPath = "C:\\ProgramData\\chocolatey";
     private String macDataPath = "/opt/homebrew/Cellar/tesseract/5.4.1_1";
@@ -16,23 +18,26 @@ public class TessHandler extends Tesseract {
         String dataPath;
         System.setProperty("jna.library.path", windowsDataPath);
         try {
-            dataPath = new File("").getCanonicalPath() + "/src/main/resources/Tess4J/tessdata";
+            dataPath = new File("").getCanonicalPath() + "/src/main/resources/tessdata";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        tess = new Tesseract();
 
-        setDatapath(dataPath);
-        setLanguage("eng");
+        tess.setDatapath(dataPath);
+        tess.setLanguage("eng");
 
     }
 
-    public String Process(Image image) {
+    public String process(Image image) {
         String output;
         try {
-            output = doOCR((BufferedImage) image);
+            output = tess.doOCR((BufferedImage) image);
         } catch (TesseractException e) {
             throw new RuntimeException(e);
         }
+
+        System.out.println(output);
 
         return output;
     }

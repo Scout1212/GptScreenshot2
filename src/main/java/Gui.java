@@ -26,11 +26,13 @@ public class Gui {
     public void displayImage(Image image) {
         frame.getContentPane().removeAll();
         frame.add(new JLabel(new ImageIcon(image)));
+        frame.setSize(image.getWidth(null), image.getHeight(null));
         frame.setVisible(true);
     }
 
     public void displayText(String text) {
        frame.getContentPane().removeAll();
        field.setText(text);
+       frame.setSize(field.getSize().width, field.getSize().height);
     }
 }

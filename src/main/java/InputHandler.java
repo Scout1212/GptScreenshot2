@@ -64,6 +64,7 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
     }
 
     public void checkInput(){
+        System.out.print("");
         if(combo.contains(NativeKeyEvent.VC_CONTROL) && combo.contains(NativeKeyEvent.VC_S)) {
             System.out.println("sucess");
             combo.clear();
@@ -81,7 +82,7 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
             Gui gui = Gui.getInstance();
             gui.displayImage(image);
             TessHandler tessHandler = new TessHandler();
-            String text = tessHandler.Process(image);
+            String text = tessHandler.process(image);
             gui.displayText(text);
         }
     }
