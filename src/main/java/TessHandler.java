@@ -17,6 +17,8 @@ public class TessHandler extends Tesseract {
         setDatapath("tessdata");
         setLanguage("eng");
 
+        a
+
     }
 
     public String Process(Image image) {
