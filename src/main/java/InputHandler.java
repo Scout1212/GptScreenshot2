@@ -5,6 +5,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -15,6 +16,7 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
     private static InputHandler instance;
 
     private InputHandler() {
+        combo = new ArrayList<>();
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException e) {
@@ -23,7 +25,7 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
     }
 
     public static InputHandler getInstance() {
-        if(getInstance() == null){
+        if(instance == null){
             instance = new InputHandler();
         }
 
@@ -33,30 +35,33 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
         combo.add(e.getKeyCode());
-        latch.countDown();
     }
 
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
         combo.remove(e.getKeyCode());
-        latch.countDown();
     }
     private int x1, y1, x2, y2;
     @Override
     public void nativeMousePressed(NativeMouseEvent e) {
-        x1 = e.getX();
-        y1 = e.getY();
-        latch.countDown();
+        if(latch != null) {
+            x1 = e.getX();
+            y1 = e.getY();
+            latch.countDown();
+        }
     }
 
     @Override
     public void nativeMouseReleased(NativeMouseEvent e) {
-        x2 = e.getX();
-        y2 = e.getY();
-        latch.countDown();
+        if(latch != null) {
+            x2 = e.getX();
+            y2 = e.getY();
+            latch.countDown();
+        }
     }
 
-    public void checkCombo(){
+    public void checkInput(){
+        System.out.println(combo);
         if(combo.size() == 2){
             if(combo.contains(NativeKeyEvent.VC_META) && combo.contains(NativeKeyEvent.VC_S)){
                 latch = new CountDownLatch(2);
@@ -65,6 +70,7 @@ public class InputHandler implements NativeKeyListener, NativeMouseListener {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                JOptionPane.showMessageDialog(null, "Drag a box to screenshot");
                 Screenshot ss = Screenshot.getInstance();
                 Image image = ss.takeScreenshot(x1, y1, x2, y2);
                 Gui gui = Gui.getInstance();

@@ -31,11 +31,8 @@ public class Screenshot{
         int width =  ax2 - ax1;
         int height = ay2 - ay1;
 
-        Rectangle area = new Rectangle(ax1, ay1, ax2, ay2);
-        Image image = sc.createScreenCapture(area);
 
-
-        return image;
+        return sc.createScreenCapture(new Rectangle(ax1, ay1, width, height));
     }
 
 
