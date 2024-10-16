@@ -12,13 +12,13 @@ public class TessHandler{
     private Tesseract tess;
 
     private String windowsDataPath = "C:\\ProgramData\\chocolatey";
-    private String macDataPath = "/opt/homebrew/Cellar/tesseract/5.4.1_1";
+    private String macDataPath = "/opt/homebrew/Cellar/tesseract/5.4.1_1/lib";
 
     public TessHandler() {
         String dataPath;
-        System.setProperty("jna.library.path", windowsDataPath);
+        System.setProperty("jna.library.path", macDataPath);
         try {
-            dataPath = new File("").getCanonicalPath() + "/src/main/resources/tessdata";
+            dataPath = new File("").getCanonicalPath() + "/src/main/resources/tessdata_best";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
